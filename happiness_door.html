@@ -1245,6 +1245,7 @@
                 if (companyData.adminEmail === emailInput) {
                     currentUserRole = "master-admin";
                     currentCompany = companyData;
+                    currentUserEmail = emailInput;
                     
                     document.getElementById('user-pill').innerText = `${emailInput} (Admin RH)`;
                     document.getElementById('user-pill').classList.remove('hidden');
@@ -1261,6 +1262,7 @@
                 if (leadersList.includes(emailInput)) {
                     currentUserRole = "lider";
                     currentCompany = companyData;
+                    currentUserEmail = emailInput;
                     
                     document.getElementById('user-pill').innerText = `${emailInput} (Gestor)`;
                     document.getElementById('user-pill').classList.remove('hidden');
@@ -1364,6 +1366,7 @@
 
                 currentUserRole = "master-admin";
                 currentCompany = companyPayload;
+                currentUserEmail = adminEmail;
 
                 document.getElementById('user-pill').innerText = `${adminEmail} (Admin RH)`;
                 document.getElementById('user-pill').classList.remove('hidden');
@@ -1519,8 +1522,9 @@
             const leaders = leadersRaw ? leadersRaw.split(',').map(e => e.trim().toLowerCase()).filter(e => e.length > 0) : [];
             
             // Garante que o criador atual está na lista de líderes da própria sala
-            if (currentRoom && currentRoom.userEmail && !leaders.includes(currentRoom.userEmail)) {
-                leaders.push(currentRoom.userEmail);
+            const creatorEmail = currentUserEmail || (currentRoom && currentRoom.userEmail);
+            if (creatorEmail && !leaders.includes(creatorEmail)) {
+                leaders.push(creatorEmail);
             }
 
             const newRoomId = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.random().toString(36).substr(2, 6)}`;
@@ -1586,7 +1590,8 @@
                         
                         // MIDDLEWARE DE INTERFACE: Só renderiza salas no painel do administrador que ele de facto lidera (Parte 3)
                         const leaderList = room.leaders ? room.leaders.map(e => e.trim().toLowerCase()) : [];
-                        const isLeaderOfThisRoom = currentRoom && leaderList.includes(currentRoom.userEmail);
+                        const checkEmail = currentUserEmail || (currentRoom && currentRoom.userEmail);
+                        const isLeaderOfThisRoom = checkEmail && leaderList.includes(checkEmail);
                         
                         if (currentUserRole === 'lider' && !isLeaderOfThisRoom) {
                             return; 
@@ -1644,7 +1649,8 @@
 
             // SEGURANÇA MULTI-CHEFE: O líder do Design não pode ver Engenharia (Parte 3 - Dica de Ouro)
             const roomLeaders = room.leaders ? room.leaders.map(e => e.trim().toLowerCase()) : [];
-            const isLeaderOfThisDepartment = roomLeaders.includes(currentRoom.userEmail);
+            const checkEmail = currentUserEmail || (currentRoom && currentRoom.userEmail);
+            const isLeaderOfThisDepartment = checkEmail && roomLeaders.includes(checkEmail);
 
             if (!isLeaderOfThisDepartment) {
                 showToast("Acesso Negado (HTTP 403): Não tem permissão de líder para consultar esta sala específica.", "error");
@@ -1992,6 +1998,7 @@
             selectedEmote = null;
             currentUserRole = "colaborador";
             currentCompany = null;
+            currentUserEmail = null;
             document.getElementById('user-pill').classList.add('hidden');
             document.getElementById('logout-btn').classList.add('hidden');
             document.getElementById('role-alert-badge').classList.add('hidden');
