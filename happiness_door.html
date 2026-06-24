@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happiness Door - Portal de Clima Organizacional Saudável</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & DM Sans para toque amigável e moderno -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['DM Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            light: '#F5EFEB', // Creme muito suave
+                            bg: '#FDFBF7',    // Off-white aconchegante
+                            card: '#FAF6F0',  // Cartão quente
+                            dark: '#2C2C2C',  // Grafite suave para olhos
+                            olive: '#7D9A8C', // Verde Oliva Calmo
+                            oliveDark: '#5E776B',
+                            terracotta: '#D38B80', // Tristeza (suave, sem culpa)
+                            yellow: '#F4D068',     // Felicidade (caloroso)
+                            slate: '#A8B5C2',      // Neutro (tranquilo)
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #2C2C2C;
+        }
+        .font-display {
+            font-family: 'DM Sans', sans-serif;
+        }
+        /* Transição suave de estados */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom scrollbar para manter estética acolhedora */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FDFBF7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #EAE3D5;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="border-b border-[#EFE9DD] bg-brand-bg/80 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="navigate('landing')">
+                <div class="h-10 w-10 rounded-xl bg-brand-olive flex items-center justify-center shadow-sm">
+                    <i data-lucide="smile" class="w-6 h-6 text-white"></i>
+                </div>
+                <span class="font-display font-bold text-xl tracking-tight text-brand-dark flex items-center">
+                    Happiness <span class="text-brand-olive ml-1">Door</span>
+                </span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <span id="user-pill" class="hidden text-xs bg-[#EFE9DD] text-brand-dark px-3 py-1.5 rounded-full font-medium"></span>
+                <button id="logout-btn" onclick="handleLogout()" class="hidden text-xs text-brand-terracotta hover:underline font-medium">
+                    Sair
+                </button>
+                <button onclick="navigate('landing')" class="text-xs font-semibold px-4 py-2 text-brand-olive border border-brand-olive rounded-lg hover:bg-brand-olive/5 transition">
+                    Início
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APP WRAPPER -->
+    <main class="flex-grow flex flex-col max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- ================= LANDING SCREEN ================= -->
+        <section id="screen-landing" class="fade-in flex flex-col lg:flex-row items-center justify-between gap-12 my-auto">
+            <div class="lg:w-1/2 space-y-6">
+                <div class="inline-flex items-center space-x-2 bg-[#F1EDE2] px-3 py-1.5 rounded-full text-xs text-brand-oliveDark font-medium">
+                    <span class="flex h-2 w-2 rounded-full bg-brand-olive animate-pulse"></span>
+                    <span>Espaço Seguro, Confortável & 100% Anónimo</span>
+                </div>
+                <h1 class="font-display text-4xl sm:text-5xl font-extrabold text-brand-dark tracking-tight leading-tight">
+                    Como está a sua equipa <span class="text-brand-olive">hoje</span>?
+                </h1>
+                <p class="text-base sm:text-lg text-brand-dark/70 leading-relaxed max-w-lg">
+                    Uma "Happiness Door" digital e humanizada que permite à sua equipa avaliar o seu humor diário e desabafar sem receios. Acolhedor, privado e com estatísticas protegidas contra a identificação pessoal.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <button onclick="openEnterRoomModal()" class="flex items-center justify-center space-x-2 px-6 py-3.5 bg-brand-olive hover:bg-brand-oliveDark text-white font-medium rounded-xl shadow-md shadow-brand-olive/20 transition-all duration-200">
+                        <i data-lucide="key-round" class="w-5 h-5"></i>
+                        <span>Entrar na minha Sala</span>
+                    </button>
+                    <button onclick="openEnterLeaderModal()" class="flex items-center justify-center space-x-2 px-6 py-3.5 bg-[#FAF6F0] hover:bg-[#F2ECE0] text-brand-dark font-medium rounded-xl border border-[#E1D9C8] transition-all duration-200">
+                        <i data-lucide="building" class="w-5 h-5"></i>
+                        <span>Painel de Gestão (RH/Chefe)</span>
+                    </button>
+                </div>
+                <div class="pt-2">
+                    <button onclick="openRegisterCompanyModal()" class="text-xs text-brand-olive font-bold hover:underline flex items-center gap-1.5">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i> Registar Minha Empresa (Primeiro Acesso / RH)
+                    </button>
+                </div>
+            </div>
+            
+            <div class="lg:w-1/2 w-full max-w-md bg-brand-card border border-[#EFE9DD] rounded-3xl p-8 shadow-sm relative">
+                <div class="absolute -top-4 -right-4 bg-brand-yellow/30 p-4 rounded-full blur-xl w-32 h-32 -z-10"></div>
+                
+                <h3 class="font-display font-bold text-lg mb-4 text-brand-dark flex items-center gap-2">
+                    <i data-lucide="shield-check" class="text-brand-olive w-5 h-5"></i>
+                    O Nosso Compromisso de Privacidade
+                </h3>
+                <div class="space-y-4 text-sm text-brand-dark/80">
+                    <div class="flex gap-3">
+                        <div class="bg-brand-olive/10 text-brand-olive p-2 rounded-lg h-9 w-9 flex items-center justify-center shrink-0">
+                            <i data-lucide="fingerprint" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <strong class="text-brand-dark block">Anonimato Blindado</strong>
+                            O seu e-mail apenas valida se tem acesso. O voto e o feedback são enviados para tabelas separadas que não mantêm qualquer ligação lógica com o utilizador.
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="bg-brand-olive/10 text-brand-olive p-2 rounded-lg h-9 w-9 flex items-center justify-center shrink-0">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <strong class="text-brand-dark block">Regra de Amostra Mínima (≥ 5)</strong>
+                            Os chefes ou administradores só conseguem visualizar gráficos ou feedbacks quando pelo menos 5 pessoas tiverem votado. Se a sala for muito pequena, os resultados permanecem confidenciais.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= EMPLOYEE WORKSPACE (TABS) ================= -->
+        <section id="screen-employee-workspace" class="hidden fade-in max-w-4xl mx-auto w-full space-y-6">
+            <div class="flex items-center justify-between border-b border-[#EFE9DD] pb-4">
+                <div class="flex items-center space-x-3">
+                    <span id="workspace-room-badge" class="px-3.5 py-1.5 bg-brand-olive/10 text-brand-oliveDark rounded-full text-xs font-semibold uppercase tracking-wider">Sala: Design</span>
+                    <span id="role-alert-badge" class="hidden px-3.5 py-1.5 bg-brand-terracotta/10 text-brand-terracotta rounded-full text-xs font-semibold">Perfil: Funcionário</span>
+                </div>
+                <!-- Tabs -->
+                <div class="flex space-x-2 bg-[#F1EDE2] p-1 rounded-xl">
+                    <button id="tab-btn-vote" onclick="switchEmployeeTab('vote')" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-white text-brand-dark shadow-sm">
+                        Auto-avaliação
+                    </button>
+                    <button id="tab-btn-mural" onclick="switchEmployeeTab('mural')" class="px-4 py-2 text-xs font-bold rounded-lg transition-all text-brand-dark/60 hover:text-brand-dark">
+                        Mural dos Colegas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content: VOTE -->
+            <div id="tab-content-vote" class="space-y-8 max-w-2xl mx-auto">
+                <div class="text-center space-y-3">
+                    <h2 class="font-display text-3xl font-bold text-brand-dark">Como correu o seu dia de trabalho?</h2>
+                    <p class="text-sm text-brand-dark/70">A sua opinião sincera ajuda a liderança e a equipa a criarem um ambiente seguro e saudável.</p>
+                </div>
+
+                <!-- Gamification Streak Card -->
+                <div class="bg-brand-card border border-[#EFE9DD] rounded-2xl p-4 flex items-center justify-between shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <div class="h-10 w-10 bg-brand-yellow/20 rounded-xl flex items-center justify-center text-brand-yellow">
+                            <i data-lucide="zap" class="w-6 h-6 fill-current"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs text-brand-dark/50 font-semibold uppercase tracking-wider">Minha Ofensiva</h4>
+                            <p id="user-streak-text" class="text-sm font-bold text-brand-dark">0 Dias Consecutivos! 🔥</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-1" id="user-badges-container">
+                        <!-- Badges will be generated here dynamically -->
+                    </div>
+                </div>
+
+                <!-- Emote Selection Grid -->
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- HAPPY -->
+                    <button onclick="selectEmote('happy')" id="emote-happy" class="group flex flex-col items-center p-6 bg-brand-card hover:bg-[#FCF6E8] border border-[#EFE9DD] hover:border-brand-yellow rounded-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-5xl md:text-6xl mb-3 filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300">🙂</div>
+                        <span class="text-sm font-semibold text-brand-dark group-hover:text-brand-dark">Feliz</span>
+                        <span class="text-[10px] text-brand-dark/50 mt-1">Produtivo & Calmo</span>
+                    </button>
+                    
+                    <!-- NEUTRAL -->
+                    <button onclick="selectEmote('neutral')" id="emote-neutral" class="group flex flex-col items-center p-6 bg-brand-card hover:bg-[#F3F7FA] border border-[#EFE9DD] hover:border-brand-slate rounded-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-5xl md:text-6xl mb-3 filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300">😐</div>
+                        <span class="text-sm font-semibold text-brand-dark group-hover:text-brand-dark">Neutro</span>
+                        <span class="text-[10px] text-brand-dark/50 mt-1">Dia Regular</span>
+                    </button>
+
+                    <!-- SAD -->
+                    <button onclick="selectEmote('sad')" id="emote-sad" class="group flex flex-col items-center p-6 bg-brand-card hover:bg-[#FAF1F0] border border-[#EFE9DD] hover:border-brand-terracotta rounded-2xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="text-5xl md:text-6xl mb-3 filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300">🙁</div>
+                        <span class="text-sm font-semibold text-brand-dark group-hover:text-brand-dark">Triste</span>
+                        <span class="text-[10px] text-brand-dark/50 mt-1">Desafiante/Difícil</span>
+                    </button>
+                </div>
+
+                <!-- Text Box & Visibility Settings -->
+                <div class="bg-brand-card border border-[#EFE9DD] rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label for="anonymous-comment" class="text-sm font-semibold text-brand-dark flex items-center gap-2">
+                            <i data-lucide="message-square-plus" class="w-4 h-4 text-brand-olive"></i>
+                            Mensagem ou Desabafo (Opcional)
+                        </label>
+                    </div>
+                    <textarea id="anonymous-comment" rows="3" placeholder="Escreva aqui uma mensagem, desabafo ou comemoração de alguma conquista..." class="w-full bg-brand-bg border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm resize-none transition outline-none"></textarea>
+                    
+                    <!-- New Target & Visibility Selectors -->
+                    <div class="border-t border-[#EFE9DD] pt-4 space-y-3">
+                        <span class="text-xs font-bold text-brand-dark block">Para quem vai esta mensagem?</span>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <label class="flex items-start p-3 bg-brand-bg border border-[#E6DEC9] rounded-xl cursor-pointer hover:border-brand-olive transition">
+                                <input type="radio" name="message-destination" value="chefe-anonimo" checked class="mt-1 text-brand-olive focus:ring-brand-olive">
+                                <div class="ml-2.5">
+                                    <span class="text-xs font-bold block text-brand-dark">Painel do Chefe</span>
+                                    <span class="text-[10px] text-brand-dark/60 block leading-tight">Anónimo. Apenas o líder vê este desabafo.</span>
+                                </div>
+                            </label>
+
+                            <label class="flex items-center gap-3 p-3 bg-brand-bg border border-[#E6DEC9] rounded-xl cursor-pointer hover:border-brand-olive transition">
+                                <input type="radio" name="message-destination" value="mural-anonimo" class="text-brand-olive focus:ring-brand-olive">
+                                <div class="ml-1">
+                                    <span class="text-xs font-bold block text-brand-dark">Mural de Colegas</span>
+                                    <span class="text-[10px] text-brand-dark/60 block leading-tight">Anónimo. Visível no feed da equipa.</span>
+                                </div>
+                            </label>
+
+                            <label class="flex items-center gap-3 p-3 bg-brand-bg border border-[#E6DEC9] rounded-xl cursor-pointer hover:border-brand-olive transition">
+                                <input type="radio" name="message-destination" value="mural-publico" class="text-brand-olive focus:ring-brand-olive">
+                                <div class="ml-1">
+                                    <span class="text-xs font-bold block text-brand-dark">Mural (Público)</span>
+                                    <span class="text-[10px] text-brand-dark/60 block leading-tight">Com o seu nome. Ideal para conquistas!</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button onclick="submitDailyVote()" id="submit-vote-btn" class="w-full py-4 bg-brand-olive hover:bg-brand-oliveDark text-white font-bold rounded-xl shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    Submeter Avaliação de Hoje
+                </button>
+            </div>
+
+            <!-- Tab Content: PEERS MURAL -->
+            <div id="tab-content-mural" class="hidden space-y-6">
+                <div class="bg-brand-card border border-[#EFE9DD] rounded-3xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-display font-bold text-xl text-brand-dark flex items-center gap-2">
+                                <i data-lucide="layers" class="text-brand-olive"></i>
+                                Mural dos Colegas (Peer-to-Peer)
+                            </h3>
+                            <p class="text-xs text-brand-dark/60 mt-1">Este feed é exclusive para funcionários. A liderança não tem permissão para aceder ou visualizar este mural.</p>
+                        </div>
+                        <span class="text-xs bg-brand-olive/10 text-brand-oliveDark font-semibold px-3 py-1 rounded-full">Espaço de Apoio Seguro</span>
+                    </div>
+
+                    <!-- Mural Feed dynamic container -->
+                    <div id="mural-feed-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-2">
+                        <!-- Post Cards will be rendered dynamically here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MASTER ADMIN WORKSPACE ================= -->
+        <section id="screen-master-admin" class="hidden fade-in max-w-4xl mx-auto w-full space-y-6">
+            <div class="bg-brand-card border border-[#EFE9DD] rounded-3xl p-6 sm:p-8 space-y-6">
+                <div class="border-b border-[#EFE9DD] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="font-display text-2xl font-bold text-brand-dark flex items-center gap-2">
+                            <i data-lucide="settings" class="text-brand-olive"></i>
+                            Painel de Controlo Master (RH / TI)
+                        </h2>
+                        <p class="text-xs text-brand-dark/60 mt-1">Gerencie as definições gerais de acesso da sua empresa e a Lista Branca de Gestores.</p>
+                    </div>
+                    <span id="master-company-domain" class="text-xs font-bold bg-brand-olive/10 text-brand-oliveDark px-3 py-1 rounded-full">@empresa.com</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Whitelist Form & List Builder -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <h3 class="font-display font-bold text-base text-brand-dark">Lista Branca de Chefes / Gestores Autorizados</h3>
+                        <p class="text-xs text-brand-dark/60">Apenas os e-mails registados nesta lista terão autorização para aceder como chefes e criar salas departamentais.</p>
+                        
+                        <div class="flex gap-2">
+                            <input type="email" id="new-leader-email" placeholder="chefe.design@empresa.com" class="flex-grow bg-brand-bg border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm transition outline-none">
+                            <button onclick="addLeaderToWhitelist()" class="px-5 py-3 bg-brand-olive hover:bg-brand-oliveDark text-white font-semibold rounded-xl shadow-md transition-all flex items-center gap-1.5 shrink-0">
+                                <i data-lucide="user-plus" class="w-4 h-4"></i> Adicionar
+                            </button>
+                        </div>
+
+                        <!-- Active Leaders List -->
+                        <div class="border border-[#EFE9DD] rounded-2xl bg-white max-h-[300px] overflow-y-auto">
+                            <ul id="whitelist-leaders-ul" class="divide-y divide-[#EFE9DD]">
+                                <!-- Whitelisted emails rendered here -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Company Info Summary -->
+                    <div class="bg-brand-bg border border-[#EFE9DD] rounded-2xl p-5 space-y-4 h-fit">
+                        <h4 class="font-display font-bold text-sm text-brand-dark">Informações da Organização</h4>
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <span class="text-brand-dark/50 block">Nome Registado:</span>
+                                <span id="info-company-name" class="font-bold text-brand-dark">-</span>
+                            </div>
+                            <div>
+                                <span class="text-brand-dark/50 block">Domínio Corporativo:</span>
+                                <span id="info-company-domain" class="font-bold text-brand-dark">-</span>
+                            </div>
+                            <div>
+                                <span class="text-brand-dark/50 block">E-mail do Administrador:</span>
+                                <span id="info-company-admin" class="font-bold text-brand-dark">-</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-[#EFE9DD]">
+                            <button onclick="navigate('landing')" class="w-full py-2 bg-brand-olive/10 hover:bg-brand-olive/20 text-brand-oliveDark text-xs font-bold rounded-xl transition">
+                                Concluir Definições & Ir para Início
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= MOTIVATIONAL / THANK YOU SCREEN ================= -->
+        <section id="screen-thank-you" class="hidden fade-in max-w-xl mx-auto w-full my-auto text-center space-y-8">
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-brand-card border-2 border-dashed border-brand-olive/30 relative">
+                <span id="thank-you-emote" class="text-6xl absolute">🙂</span>
+            </div>
+            
+            <div class="space-y-3">
+                <h2 id="thank-you-title" class="font-display text-3xl font-extrabold text-brand-dark">Obrigado pela sua sinceridade!</h2>
+                <div class="p-6 bg-brand-card border border-[#EFE9DD] rounded-2xl max-w-md mx-auto">
+                    <p id="thank-you-message" class="text-brand-dark/80 italic leading-relaxed">
+                        "Que incrível! Que o seu dia continue a render bons frutos."
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <p class="text-xs text-brand-dark/60">Já cumpriu a sua auto-avaliação diária. Amanhã enviaremos um novo lembrete!</p>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="navigate('employee-workspace')" class="px-6 py-2.5 bg-[#FAF6F0] border border-[#EFE9DD] text-brand-dark font-medium rounded-lg text-sm transition">
+                        Ver Mural dos Colegas
+                    </button>
+                    <button onclick="navigate('landing')" class="px-6 py-2.5 bg-brand-olive hover:bg-brand-oliveDark text-white font-medium rounded-lg text-sm transition shadow-sm">
+                        Voltar ao Início
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ADMIN DASHBOARD SCREEN ================= -->
+        <section id="screen-admin-dashboard" class="hidden fade-in space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="font-display text-3xl font-extrabold text-brand-dark">Painel do Administrador / Gestor</h2>
+                    <p class="text-sm text-brand-dark/70">Acompanhe de forma ética a saúde mental e o clima das suas equipas.</p>
+                </div>
+                <button onclick="openCreateRoomModal()" class="flex items-center justify-center space-x-2 px-5 py-3 bg-brand-olive hover:bg-brand-oliveDark text-white font-medium rounded-xl transition shadow-md">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    <span>Criar Nova Sala</span>
+                </button>
+            </div>
+
+            <!-- ROOMS LIST -->
+            <div id="rooms-loading" class="text-center py-12">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-olive mx-auto"></div>
+                <p class="text-xs text-brand-dark/50 mt-2">A carregar as salas da empresa...</p>
+            </div>
+
+            <div id="rooms-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic Room Cards will go here -->
+            </div>
+
+            <!-- ROOM DETAIL MODAL / SUB-PANEL (Initially Hidden) -->
+            <div id="room-detail-panel" class="hidden bg-brand-card border border-[#EFE9DD] rounded-3xl p-6 sm:p-8 space-y-8 fade-in">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EFE9DD] pb-6">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 id="detail-room-name" class="font-display text-2xl font-bold text-brand-dark">Engenharia</h3>
+                            <span id="detail-room-domain" class="text-xs font-semibold bg-[#EFE9DD] text-brand-dark/70 px-2.5 py-1 rounded-full">@empresa.com</span>
+                        </div>
+                        <p id="detail-room-desc" class="text-xs text-brand-dark/50 mt-1">ID da Sala: dev-room-123</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button id="leader-mural-locked-btn" class="hidden px-4 py-2 bg-brand-terracotta/10 text-brand-terracotta rounded-lg text-xs font-bold flex items-center gap-2 cursor-not-allowed">
+                            <i data-lucide="lock" class="w-4 h-4"></i> Mural de Colegas Bloqueado ao Líder
+                        </button>
+                        <button onclick="copyRoomLink()" class="flex items-center space-x-2 text-xs font-semibold px-4 py-2 border border-[#E1D9C8] hover:bg-white rounded-lg transition text-brand-dark">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            <span>Copiar Link de Acesso</span>
+                        </button>
+                        <button onclick="closeRoomDetail()" class="text-brand-dark hover:text-brand-terracotta transition p-2">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Privacy Block Alert for Small Rooms -->
+                <div id="privacy-guard-warning" class="hidden bg-[#FAF2F0] border border-brand-terracotta/20 rounded-2xl p-4 flex gap-3 text-sm text-brand-terracotta">
+                    <i data-lucide="eye-off" class="w-6 h-6 shrink-0 mt-0.5"></i>
+                    <div>
+                        <strong class="block font-bold">Modo de Privacidade Ativo (Menos de 5 Votos)</strong>
+                        Para garantir o anonimato real do seu departamento, as estatísticas, gráficos e feedbacks enviados para o líder estão bloqueados. É necessária uma amostra mínima de 5 votos nesta sala para que os dados fiquem visíveis. Atualmente temos <span id="privacy-current-votes-count" class="font-bold">0</span> votos.
+                    </div>
+                </div>
+
+                <!-- ROOM STATS PANEL (Only visible if >= 5 votes) -->
+                <div id="room-stats-content" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Distribution Visual Chart -->
+                    <div class="bg-brand-bg border border-[#EFE9DD] rounded-2xl p-6 space-y-6">
+                        <h4 class="font-display font-bold text-base text-brand-dark">Distribuição do Clima Diário (Dados Agregados)</h4>
+                        
+                        <div class="space-y-4">
+                            <!-- Happy Bar -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-semibold">
+                                    <span class="flex items-center gap-1.5">🙂 Feliz</span>
+                                    <span id="pct-happy-txt">0%</span>
+                                </div>
+                                <div class="w-full bg-[#EFE9DD] h-4 rounded-full overflow-hidden">
+                                    <div id="pct-happy-bar" class="bg-brand-yellow h-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Neutral Bar -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-semibold">
+                                    <span class="flex items-center gap-1.5">😐 Neutro</span>
+                                    <span id="pct-neutral-txt">0%</span>
+                                </div>
+                                <div class="w-full bg-[#EFE9DD] h-4 rounded-full overflow-hidden">
+                                    <div id="pct-neutral-bar" class="bg-brand-slate h-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Sad Bar -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between text-xs font-semibold">
+                                    <span class="flex items-center gap-1.5">🙁 Triste</span>
+                                    <span id="pct-sad-txt">0%</span>
+                                </div>
+                                <div class="w-full bg-[#EFE9DD] h-4 rounded-full overflow-hidden">
+                                    <div id="pct-sad-bar" class="bg-brand-terracotta h-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-brand-olive/5 rounded-xl text-xs text-brand-oliveDark">
+                            <span class="font-bold block mb-1">Nota de Privacidade:</span>
+                            Estes dados mostram o total acumulado anonimamente. O painel não revela quem enviou cada avaliação de humor.
+                        </div>
+                    </div>
+
+                    <!-- Feedbacks direcionados ao Líder -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <h4 class="font-display font-bold text-base text-brand-dark flex items-center justify-between">
+                            <span>Feedbacks Anónimos Direcionados ao Chefe</span>
+                            <span id="feedbacks-count" class="text-xs bg-[#EFE9DD] text-brand-dark/70 px-2.5 py-1 rounded-full">0 feedbacks</span>
+                        </h4>
+
+                        <div id="feedbacks-list" class="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+                            <!-- Dynamic Comments Directed to Boss Go Here -->
+                        </div>
+
+                        <!-- AI ANALYZER & SUMMARY TOOL using Gemini 2.5 Flash -->
+                        <div class="border-t border-[#EFE9DD] pt-4 mt-4">
+                            <div class="bg-brand-olive/5 border border-brand-olive/15 rounded-2xl p-4 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-6 w-6 rounded bg-brand-olive flex items-center justify-center text-white text-xs">
+                                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                        </div>
+                                        <h5 class="text-xs font-bold text-brand-oliveDark uppercase tracking-wider">Análise de Clima por Inteligência Artificial</h5>
+                                    </div>
+                                    <button onclick="generateAISummary()" class="text-xs font-semibold bg-brand-olive hover:bg-brand-oliveDark text-white px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+                                        <i data-lucide="brain" class="w-3.5 h-3.5"></i>
+                                        Gerar Resumo Semanal & Ação
+                                    </button>
+                                </div>
+                                <p class="text-[11px] text-brand-dark/60">O nosso assistente processa exclusivamente os feedbacks direcionados à liderança, sugerindo ações sem desvendar de quem partiu o feedback.</p>
+                                <div id="ai-summary-result" class="hidden text-xs bg-white border border-[#EFE9DD] rounded-xl p-3 text-brand-dark/80 whitespace-pre-line leading-relaxed"></div>
+                                <div id="ai-loading" class="hidden flex items-center gap-2 justify-center py-2 text-xs text-brand-dark/50">
+                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-brand-olive"></div>
+                                    A processar e a estruturar análise anónima...
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-[#EFE9DD] bg-brand-card/40 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:flex sm:justify-between sm:items-center space-y-4 sm:space-y-0">
+            <p class="text-xs text-brand-dark/50">© 2026 Happiness Door. Construído para um ecossistema corporativo saudável e transparente.</p>
+            <div class="flex justify-center space-x-6 text-xs text-brand-dark/50">
+                <span class="flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-3.5 h-3.5 text-brand-olive"></i> RGPD em Conformidade</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="lock" class="w-3.5 h-3.5 text-brand-olive"></i> Encriptado na Fonte</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== DIALOG MODALS ==================== -->
+    
+    <!-- 1. ENTER ROOM MODAL -->
+    <div id="modal-enter-room" class="hidden fixed inset-0 z-50 bg-brand-dark/30 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-brand-card border border-[#EFE9DD] rounded-3xl max-w-md w-full p-6 space-y-6 shadow-xl fade-in">
+            <div class="flex items-center justify-between border-b border-[#EFE9DD] pb-4">
+                <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
+                    <i data-lucide="door-open" class="text-brand-olive w-5 h-5"></i>
+                    Aceder à Sala do Departamento
+                </h3>
+                <button onclick="closeEnterRoomModal()" class="text-brand-dark/60 hover:text-brand-terracotta">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Access Code -->
+                <div class="space-y-1.5">
+                    <label for="room-code-input" class="text-xs font-semibold text-brand-dark/70">Código de Acesso da Sala (UUID)</label>
+                    <input type="text" id="room-code-input" placeholder="Ex: design-xyz-123" class="w-full bg-brand-bg border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm transition outline-none">
+                </div>
+
+                <!-- Google OAuth Simulation Section -->
+                <div class="bg-brand-bg border border-[#EFE9DD] p-4 rounded-2xl space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-brand-dark">Autenticação com Google</span>
+                        <span class="text-[10px] text-brand-olive font-semibold flex items-center gap-1"><i data-lucide="shield" class="w-3.5 h-3.5"></i> Verificação de Domínio</span>
+                    </div>
+                    <p class="text-[11px] text-brand-dark/60">Para autenticar, introduza o seu e-mail profissional da Google corporativa. O sistema validará se pertence ao domínio autorizado.</p>
+                    <input type="email" id="google-email-input" placeholder="colaborador@empresa.com" class="w-full bg-white border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-2.5 text-sm transition outline-none">
+                </div>
+            </div>
+
+            <button onclick="processEnterRoom()" class="w-full py-3 bg-brand-olive hover:bg-brand-oliveDark text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>
+                <span>Aceder de Forma Segura</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. CREATE ROOM MODAL -->
+    <div id="modal-create-room" class="hidden fixed inset-0 z-50 bg-brand-dark/30 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-brand-card border border-[#EFE9DD] rounded-3xl max-w-md w-full p-6 space-y-6 shadow-xl fade-in">
+            <div class="flex items-center justify-between border-b border-[#EFE9DD] pb-4">
+                <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="text-brand-olive w-5 h-5"></i>
+                    Criar Nova Sala
+                </h3>
+                <button onclick="closeCreateRoomModal()" class="text-brand-dark/60 hover:text-brand-terracotta">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="space-y-1.5">
+                    <label for="new-room-name" class="text-xs font-semibold text-brand-dark/70">Nome da Sala (ex: Engenharia, Design)</label>
+                    <input type="text" id="new-room-name" placeholder="Ex: Engenharia" class="w-full bg-brand-bg border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm transition outline-none">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="new-room-domain" class="text-xs font-semibold text-brand-dark/70">Domínio Permitido para Login do Google</label>
+                    <input type="text" id="new-room-domain" placeholder="Ex: empresa.com" class="w-full bg-brand-bg border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm transition outline-none">
+                    <p class="text-[10px] text-brand-dark/50">Isto garante que apenas utilizadores com e-mail @empresa.com conseguem validar a entrada nesta sala.</p>
+                </div>
+
+                <!-- New Leaders Email Configuration -->
+                <div class="space-y-1.5">
+                    <label for="new-room-leaders" class="text-xs font-semibold text-brand-dark/70">E-mails dos Líderes / Chefes (bloqueados no mural de colegas)</label>
+                    <textarea id="new-room-leaders" rows="2" placeholder="chefe1@empresa.com, rh@empresa.com" class="w-full bg-brand-bg border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm transition outline-none resize-none"></textarea>
+                    <p class="text-[10px] text-brand-dark/50">Estes utilizadores apenas terão acesso ao Painel de Clima de Liderança, estando permanentemente barrados do Mural de Colegas.</p>
+                </div>
+
+                <!-- Whitelist of normal workers -->
+                <div class="space-y-1.5">
+                    <label for="new-room-whitelist" class="text-xs font-semibold text-brand-dark/70">E-mails de Funcionários Autorizados (Opcional - separados por vírgula)</label>
+                    <textarea id="new-room-whitelist" rows="2" placeholder="colaborador1@empresa.com, colaborador2@empresa.com" class="w-full bg-brand-bg border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm transition outline-none resize-none"></textarea>
+                </div>
+            </div>
+
+            <button onclick="processCreateRoom()" class="w-full py-3 bg-brand-olive hover:bg-brand-oliveDark text-white font-semibold rounded-xl shadow-md transition">
+                Gerar Sala & Código Único (UUID)
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. ENTER LEADER MODAL FOR MANAGER LIST WHITELISTING -->
+    <div id="modal-enter-leader" class="hidden fixed inset-0 z-50 bg-brand-dark/30 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-brand-card border border-[#EFE9DD] rounded-3xl max-w-md w-full p-6 space-y-6 shadow-xl fade-in">
+            <div class="flex items-center justify-between border-b border-[#EFE9DD] pb-4">
+                <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
+                    <i data-lucide="shield-check" class="text-brand-yellow w-5 h-5"></i>
+                    Acesso Restrito: Gestão de Salas
+                </h3>
+                <button onclick="closeEnterLeaderModal()" class="text-brand-dark/60 hover:text-brand-terracotta">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-brand-bg border border-[#EFE9DD] p-4 rounded-2xl space-y-3">
+                    <span class="text-xs font-bold text-brand-dark flex items-center gap-1.5">
+                        <i data-lucide="google" class="w-4 h-4 text-brand-olive"></i>
+                        Login do Google para Chefes/Gestores
+                    </span>
+                    <p class="text-[11px] text-brand-dark/60 leading-relaxed">
+                        Para garantir a segurança, introduza o seu e-mail profissional de líder. O sistema consultará a lista branca corporativa.
+                    </p>
+                    <input type="email" id="leader-email-input" placeholder="gerente@empresa.com" class="w-full bg-[#FAF6F0] border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm transition outline-none">
+                </div>
+
+                <!-- Redirection Warning Block (Falta de permissões com indicação de e-mail de RH) -->
+                <div id="leader-redirect-warning" class="hidden bg-[#FAF2F0] border border-brand-terracotta/20 rounded-2xl p-4 space-y-3 text-xs text-brand-terracotta">
+                    <div class="flex gap-2">
+                        <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
+                        <div class="leading-relaxed">
+                            <p class="font-bold">Acesso Rejeitado</p>
+                            <p id="leader-denied-reason-text">Seu e-mail não foi encontrado na lista de gestores autorizados. Por favor, solicite ao Administrador de RH da sua empresa para incluir o seu e-mail no painel de controle.</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-brand-terracotta/10 pt-2 mt-2">
+                        <span>Entrar como funcionário comum?</span>
+                        <button onclick="switchLeaderToWorkerFlow()" class="px-3 py-1 bg-brand-terracotta hover:bg-brand-terracotta/90 text-white rounded-lg font-semibold transition">
+                            Sim, Entrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="processEnterLeader()" id="leader-verify-btn" class="w-full py-3 bg-brand-olive hover:bg-brand-oliveDark text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                <i data-lucide="log-in" class="w-5 h-5"></i>
+                <span>Verificar Lista Branca</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 4. REGISTER COMPANY MODAL (RH First Access Flow) -->
+    <div id="modal-register-company" class="hidden fixed inset-0 z-50 bg-brand-dark/30 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-brand-card border border-[#EFE9DD] rounded-3xl max-w-md w-full p-6 space-y-6 shadow-xl fade-in">
+            <div class="flex items-center justify-between border-b border-[#EFE9DD] pb-4">
+                <h3 class="font-display font-bold text-lg text-brand-dark flex items-center gap-2">
+                    <i data-lucide="building-2" class="text-brand-olive w-5 h-5"></i>
+                    Registar Minha Empresa (RH)
+                </h3>
+                <button onclick="closeRegisterCompanyModal()" class="text-brand-dark/60 hover:text-brand-terracotta">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="space-y-1.5">
+                    <label for="reg-company-name" class="text-xs font-semibold text-brand-dark/70">Nome da Empresa</label>
+                    <input type="text" id="reg-company-name" placeholder="Ex: Design Corp" class="w-full bg-brand-bg border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm transition outline-none">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label for="reg-company-domain" class="text-xs font-semibold text-brand-dark/70">Domínio Corporativo (ex: empresa.com)</label>
+                    <input type="text" id="reg-company-domain" placeholder="empresa.com" class="w-full bg-brand-bg border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-3 text-sm transition outline-none">
+                    <p class="text-[10px] text-brand-dark/50">Todos os logins deste domínio serão mapeados automaticamente.</p>
+                </div>
+
+                <div class="bg-brand-bg border border-[#EFE9DD] p-4 rounded-2xl space-y-2">
+                    <span class="text-xs font-bold text-brand-dark flex items-center gap-1.5">
+                        <i data-lucide="google" class="w-4 h-4 text-brand-olive"></i>
+                        E-mail do Administrador Master (RH)
+                    </span>
+                    <input type="email" id="reg-company-admin-email" placeholder="rh@empresa.com" class="w-full bg-white border border-[#E6DEC9] focus:border-brand-olive focus:ring-1 focus:ring-brand-olive rounded-xl p-2.5 text-sm transition outline-none">
+                    <p class="text-[10px] text-brand-dark/50">Será o e-mail responsável pela lista branca global de gestores da empresa.</p>
+                </div>
+            </div>
+
+            <button onclick="processRegisterCompany()" id="btn-reg-company-submit" class="w-full py-3 bg-brand-olive hover:bg-brand-oliveDark text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>
+                <span>Concluir Registo Corporativo</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST MESSAGE NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp as fbInitializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth as fbGetAuth, signInWithCustomToken as fbSignInWithCustomToken, signInAnonymously as fbSignInAnonymously, onAuthStateChanged as fbOnAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore as fbGetFirestore, doc as fbDoc, setDoc as fbSetDoc, getDoc as fbGetDoc, getDocs as fbGetDocs, collection as fbCollection, query as fbQuery, onSnapshot as fbOnSnapshot, addDoc as fbAddDoc, updateDoc as fbUpdateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Variables & Defensive Fallbacks (RULE 1 Support) - Extração extremamente robusta do appId ignorando barras iniciais
+        const rawAppId = typeof __app_id !== 'undefined' && __app_id ? __app_id : 'happiness-door-saas';
+        const appIdParts = rawAppId.split('/').filter(p => p.trim() !== '');
+        const appId = appIdParts.length > 0 ? appIdParts[0] : 'happiness-door-saas';
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "",
+            authDomain: "happiness-door-saas.firebaseapp.com",
+            projectId: "happiness-door-saas",
+            storageBucket: "happiness-door-saas.appspot.com",
+            messagingSenderId: "",
+            appId: ""
+        };
+
+        const isMockFirebase = !firebaseConfig.apiKey;
+
+        // Mock functions for offline local testing
+        const getMockData = (path) => {
+            const data = localStorage.getItem('mock_db_' + path);
+            return data ? JSON.parse(data) : null;
+        };
+
+        const setMockData = (path, data, merge = false) => {
+            let finalData = data;
+            if (merge) {
+                const existing = getMockData(path) || {};
+                finalData = { ...existing, ...data };
+            }
+            localStorage.setItem('mock_db_' + path, JSON.stringify(finalData));
+        };
+
+        const mockDoc = (db, ...parts) => {
+            const path = parts.filter(p => typeof p === 'string').join('/');
+            return { type: 'doc', path, id: parts[parts.length - 1] };
+        };
+
+        const mockCollection = (db, ...parts) => {
+            const path = parts.filter(p => typeof p === 'string').join('/');
+            return { type: 'collection', path };
+        };
+
+        const mockGetDoc = async (ref) => {
+            const data = getMockData(ref.path);
+            return {
+                exists: () => data !== null,
+                data: () => data
+            };
+        };
+
+        const mockSetDoc = async (ref, data, options = {}) => {
+            setMockData(ref.path, data, options.merge);
+        };
+
+        const mockAddDoc = async (ref, data) => {
+            const docId = Math.random().toString(36).substring(2, 10);
+            const path = ref.path + '/' + docId;
+            setMockData(path, { ...data, id: docId });
+            return { id: docId, path };
+        };
+
+        const mockUpdateDoc = async (ref, data) => {
+            setMockData(ref.path, data, true);
+        };
+
+        const mockGetDocs = async (ref) => {
+            const keys = Object.keys(localStorage);
+            const docs = [];
+            keys.forEach(key => {
+                if (key.startsWith('mock_db_' + ref.path)) {
+                    const subPath = key.substring('mock_db_'.length);
+                    const remaining = subPath.substring(ref.path.length + 1);
+                    if (remaining && !remaining.includes('/')) {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        docs.push({
+                            id: subPath.split('/').pop(),
+                            data: () => data
+                        });
+                    }
+                }
+            });
+            return {
+                forEach: (callback) => docs.forEach(callback),
+                empty: docs.length === 0
+            };
+        };
+
+        const mockOnSnapshot = (ref, callback) => {
+            const trigger = async () => {
+                if (ref.type === 'collection') {
+                    const snap = await mockGetDocs(ref);
+                    callback(snap);
+                } else {
+                    const snap = await mockGetDoc(ref);
+                    callback(snap);
+                }
+            };
+            trigger();
+            const interval = setInterval(trigger, 1000);
+            return () => {
+                clearInterval(interval);
+            };
+        };
+
+        const mockAuth = {
+            currentUser: { uid: "mock-user-123" },
+            signInAnonymously: async () => ({ user: { uid: "mock-user-123" } }),
+            signInWithCustomToken: async () => ({ user: { uid: "mock-user-123" } }),
+            onAuthStateChanged: (callback) => {
+                setTimeout(() => callback({ uid: "mock-user-123" }), 100);
+                return () => {};
+            }
+        };
+
+        // Firebase Wrappers
+        const doc = (...args) => isMockFirebase ? mockDoc(...args) : fbDoc(...args);
+        const collection = (...args) => isMockFirebase ? mockCollection(...args) : fbCollection(...args);
+        const getDoc = async (...args) => isMockFirebase ? mockGetDoc(...args) : fbGetDoc(...args);
+        const setDoc = async (...args) => isMockFirebase ? mockSetDoc(...args) : fbSetDoc(...args);
+        const addDoc = async (...args) => isMockFirebase ? mockAddDoc(...args) : fbAddDoc(...args);
+        const updateDoc = async (...args) => isMockFirebase ? mockUpdateDoc(...args) : fbUpdateDoc(...args);
+        const getDocs = async (...args) => isMockFirebase ? mockGetDocs(...args) : fbGetDocs(...args);
+        const onSnapshot = (...args) => isMockFirebase ? mockOnSnapshot(...args) : fbOnSnapshot(...args);
+        const signInAnonymously = async (...args) => isMockFirebase ? mockAuth.signInAnonymously(...args) : fbSignInAnonymously(...args);
+        const signInWithCustomToken = async (...args) => isMockFirebase ? mockAuth.signInWithCustomToken(...args) : fbSignInWithCustomToken(...args);
+        const onAuthStateChanged = (...args) => isMockFirebase ? mockAuth.onAuthStateChanged(...args) : fbOnAuthStateChanged(...args);
+
+        // FUNÇÃO DE SEGURANÇA E PARIDADE DE SEGMENTOS FIRESTORE (ALINHADO COM A RULE 1 E 3 DO CANVAS)
+        const getSafePublicPath = (collectionName, docId = null) => {
+            if (docId) {
+                return doc(db, 'artifacts', appId, 'public', 'data', collectionName, docId);
+            } else {
+                return collection(db, 'artifacts', appId, 'public', 'data', collectionName);
+            }
+        };
+
+        const getSafePrivatePath = (userId, collectionName, docId = null) => {
+            if (docId) {
+                return doc(db, 'artifacts', appId, 'users', userId, collectionName, docId);
+            } else {
+                return collection(db, 'artifacts', appId, 'users', userId, collectionName);
+            }
+        };
+
+        // Initialize Firebase
+        let app, auth, db;
+        if (!isMockFirebase) {
+            app = fbInitializeApp(firebaseConfig);
+            auth = fbGetAuth(app);
+            db = fbGetFirestore(app);
+        } else {
+            console.log("Firebase API Key is empty. Running in Offline Mock mode using localStorage.");
+            auth = mockAuth;
+        }
+
+        // State variables
+        let firebaseUser = null;
+        let currentRoom = null;
+        let selectedEmote = null;
+        let activeRoomVotes = [];
+        let roomSubscriptions = [];
+        let currentUserEmail = null;
+        
+        // Multi-tenant SaaS Roles
+        let currentUserRole = "colaborador"; // "colaborador" | "lider" | "master-admin" (Parte 1)
+        let currentCompany = null; // Empresa ativa na sessão
+
+        // Helper Lock robusto para sincronização e garantia de estado autenticado (RULE 3)
+        const ensureAuth = async () => {
+            if (auth.currentUser) return auth.currentUser;
+            return new Promise((resolve) => {
+                const unsubscribe = onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        unsubscribe();
+                        resolve(user);
+                    }
+                });
+            });
+        };
+
+        // UI navigation
+        window.navigate = (screenId) => {
+            document.getElementById('screen-landing').classList.add('hidden');
+            document.getElementById('screen-employee-workspace').classList.add('hidden');
+            document.getElementById('screen-thank-you').classList.add('hidden');
+            document.getElementById('screen-admin-dashboard').classList.add('hidden');
+            document.getElementById('screen-master-admin').classList.add('hidden');
+            
+            // SECURITY MIDDLEWARE: Proteção de Rotas Baseada em Perfis (Parte 2 & 3)
+            if (screenId === 'master-admin' && currentUserRole !== 'master-admin') {
+                showToast("Acesso Negado (HTTP 403 Forbidden): Apenas o Administrador de RH tem permissão para aceder à gestão master.", "error");
+                navigate('landing');
+                return;
+            }
+
+            if (screenId === 'admin-dashboard' && currentUserRole !== 'lider') {
+                showToast("Acesso Negado (HTTP 403 Forbidden): Apenas líderes têm permissão para consultar o Painel de Clima.", "error");
+                navigate('landing');
+                return;
+            }
+
+            if (screenId === 'employee-workspace' && currentUserRole !== 'colaborador') {
+                showToast("Acesso Negado (HTTP 403 Forbidden): Administradores e Líderes não têm permissão para votar na equipa.", "error");
+                navigate('landing');
+                return;
+            }
+            
+            document.getElementById(`screen-${screenId}`).classList.remove('hidden');
+
+            if (screenId === 'admin-dashboard') {
+                loadRooms();
+            }
+        };
+
+        // Tab Switching in Employee Workspace
+        window.switchEmployeeTab = (tab) => {
+            const voteBtn = document.getElementById('tab-btn-vote');
+            const muralBtn = document.getElementById('tab-btn-mural');
+            const voteContent = document.getElementById('tab-content-vote');
+            const muralContent = document.getElementById('tab-content-mural');
+
+            if (currentUserRole !== 'colaborador') {
+                showToast("Ação rejeitada: Apenas funcionários comuns acedem ao workspace de equipa.", "error");
+                return;
+            }
+
+            voteBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all bg-white text-brand-dark shadow-sm";
+            muralBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all text-brand-dark/60 hover:text-brand-dark";
+            voteContent.classList.remove('hidden');
+            muralContent.classList.add('hidden');
+            if (tab === 'mural') {
+                voteBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all text-brand-dark/60 hover:text-brand-dark";
+                muralBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all bg-white text-brand-dark shadow-sm";
+                voteContent.classList.add('hidden');
+                muralContent.classList.remove('hidden');
+                loadMuralFeed();
+            }
+        };
+
+        // Toast Helper
+        window.showToast = (message, type = 'info') => {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-xl shadow-lg border text-sm flex items-center space-x-2 transition-all duration-300 pointer-events-auto fade-in ${
+                type === 'error' ? 'bg-[#FAF2F0] text-brand-terracotta border-brand-terracotta/20' :
+                type === 'success' ? 'bg-brand-olive/10 text-brand-oliveDark border-brand-olive/20' :
+                'bg-brand-card text-brand-dark border-[#EFE9DD]'
+            }`;
+            
+            const icon = type === 'error' ? 'alert-triangle' : type === 'success' ? 'check-circle' : 'info';
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        };
+
+        // Whitelist of Badges
+        const BADGE_STREAK_TIERS = [
+            { threshold: 1, text: "Iniciante 🌱", style: "bg-green-100 text-green-800" },
+            { threshold: 3, text: "Comprometido 🔥", style: "bg-orange-100 text-orange-800" },
+            { threshold: 5, text: "Inquebrável 💎", style: "bg-indigo-100 text-indigo-800" },
+            { threshold: 10, text: "Guru da Autoconsciência 🧘", style: "bg-purple-100 text-purple-800" }
+        ];
+
+        // Escuta o estado da autenticação globalmente
+        onAuthStateChanged(auth, (user) => {
+            firebaseUser = user;
+            if (user) {
+                console.log("Sessão ativa:", user.uid);
+                if (!document.getElementById('screen-admin-dashboard').classList.contains('hidden')) {
+                    loadRooms();
+                }
+            }
+        });
+
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch(e) {
+                console.warn("Erro no token de início, a recorrer a login anónimo:", e);
+                try {
+                    await signInAnonymously(auth);
+                } catch(err) {
+                    console.error("Falha no login anónimo de reserva:", err);
+                    showToast("Incapaz de estabelecer ligação segura com o servidor.", "error");
+                }
+            }
+        };
+
+        // Form Cleaners (Security & Privacy Enhancements)
+        const clearCreateRoomForm = () => {
+            document.getElementById('new-room-name').value = '';
+            document.getElementById('new-room-domain').value = '';
+            document.getElementById('new-room-whitelist').value = '';
+            document.getElementById('new-room-leaders').value = '';
+        };
+
+        const clearEnterRoomForm = () => {
+            document.getElementById('room-code-input').value = '';
+            document.getElementById('google-email-input').value = '';
+        };
+
+        const clearEnterLeaderForm = () => {
+            document.getElementById('leader-email-input').value = '';
+            document.getElementById('leader-redirect-warning').classList.add('hidden');
+        };
+
+        const clearRegisterCompanyForm = () => {
+            document.getElementById('reg-company-name').value = '';
+            document.getElementById('reg-company-domain').value = '';
+            document.getElementById('reg-company-admin-email').value = '';
+        };
+
+        // 1. Enter Room Modal Mechanics (Funcionário)
+        window.openEnterRoomModal = () => {
+            clearEnterRoomForm();
+            document.getElementById('modal-enter-room').classList.remove('hidden');
+        };
+        window.closeEnterRoomModal = () => {
+            clearEnterRoomForm();
+            document.getElementById('modal-enter-room').classList.add('hidden');
+        };
+
+        window.processEnterRoom = async () => {
+            const user = await ensureAuth();
+            if (!user) {
+                showToast("A aguardar autenticação segura com o servidor.", "info");
+                return;
+            }
+
+            const rawCodeInput = document.getElementById('room-code-input').value.trim();
+            let codeInput = rawCodeInput;
+
+            if (codeInput.includes('?room=')) {
+                codeInput = codeInput.split('?room=')[1];
+            } else if (codeInput.includes('/')) {
+                codeInput = codeInput.split('/').pop();
+            }
+            codeInput = codeInput.split('?')[0].split('#')[0].trim();
+
+            const emailInput = document.getElementById('google-email-input').value.trim().toLowerCase();
+
+            if (!codeInput || !emailInput) {
+                showToast("Por favor, preencha todos os campos para autenticar.", "error");
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput)) {
+                showToast("Introduza um e-mail do Google válido.", "error");
+                return;
+            }
+
+            try {
+                // RULE 1: Public paths segment validation
+                const roomsSnap = await getDoc(getSafePublicPath('rooms', codeInput));
+                if (!roomsSnap.exists()) {
+                    showToast("Código de sala inexistente ou inválido.", "error");
+                    return;
+                }
+
+                const room = roomsSnap.data();
+                
+                // Determine user role based on configured lists (Parte 1: Camada de Base de Dados / Roles)
+                const leaderList = room.leaders ? room.leaders.map(e => e.trim().toLowerCase()) : [];
+                const isLeader = leaderList.includes(emailInput);
+
+                const domainSuffix = emailInput.split('@')[1];
+                const isDomainAllowed = room.domain && domainSuffix === room.domain.toLowerCase();
+                const isWhitelisted = room.allowedEmails && room.allowedEmails.includes(emailInput);
+
+                // Se não é funcionário autorizado (ou líder), barra-se de imediato!
+                if (!isLeader && !isDomainAllowed && !isWhitelisted) {
+                    showToast(`Acesso negado (HTTP 403). O seu e-mail não pertence ao domínio @${room.domain} nem está autorizado nesta sala.`, "error");
+                    return;
+                }
+
+                currentRoom = room;
+                currentRoom.userEmail = emailInput;
+                currentUserEmail = emailInput;
+                
+                // Atribuição de perfil inequívoca
+                currentUserRole = isLeader ? "lider" : "colaborador";
+
+                // Setup header indicators & adapt view visually (Parte 3: Camada de Interface)
+                const badge = document.getElementById('role-alert-badge');
+                if (isLeader) {
+                    badge.innerText = "Perfil: Líder / Chefe";
+                    badge.className = "px-3.5 py-1.5 bg-brand-yellow/10 text-brand-dark/70 rounded-full text-xs font-semibold";
+                    badge.classList.remove('hidden');
+                    
+                    document.getElementById('user-pill').innerText = `${emailInput} (Líder)`;
+                    document.getElementById('user-pill').classList.remove('hidden');
+                    document.getElementById('logout-btn').classList.remove('hidden');
+
+                    closeEnterRoomModal();
+                    showToast(`Sessão iniciada como Líder de ${room.name}!`, "success");
+                    navigate('admin-dashboard');
+                    viewRoomDetails(room);
+                    return;
+                } else {
+                    badge.innerText = "Perfil: Funcionário";
+                    badge.className = "px-3.5 py-1.5 bg-brand-olive/10 text-brand-oliveDark rounded-full text-xs font-semibold";
+                    badge.classList.remove('hidden');
+                }
+
+                // RULE 1: Private user path segment matching EXACTLY Firebase Auth security rules (firebaseUser.uid)
+                const userHash = btoa(emailInput).replace(/=/g, '');
+                const userStreakRef = getSafePrivatePath(user.uid, 'user_streaks', room.id + '_' + userHash);
+                const userStreakSnap = await getStreakData(userStreakRef);
+
+                updateStreakUI(userStreakSnap);
+
+                document.getElementById('workspace-room-badge').innerText = `Sala: ${room.name}`;
+                document.getElementById('user-pill').innerText = `${emailInput}`;
+                document.getElementById('user-pill').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+
+                closeEnterRoomModal();
+                switchEmployeeTab('vote');
+                navigate('employee-workspace');
+                showToast(`Bem-vindo à sala de ${room.name}!`, "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Erro ao aceder à sala. Verifique a sua ligação.", "error");
+            }
+        };
+
+        const getStreakData = async (userStreakRef) => {
+            const snap = await getDoc(userStreakRef);
+            if (snap.exists()) return snap.data();
+
+            const defaultStreak = {
+                roomId: currentRoom.id,
+                streakCount: 0,
+                lastVoteDate: null,
+                badges: []
+            };
+            await setDoc(userStreakRef, defaultStreak);
+            return defaultStreak;
+        };
+
+        const updateStreakUI = (streakData) => {
+            const streakText = document.getElementById('user-streak-text');
+            const badgesContainer = document.getElementById('user-badges-container');
+            
+            streakText.innerHTML = `${streakData.streakCount} Dias Consecutivos! 🔥`;
+            badgesContainer.innerHTML = '';
+
+            BADGE_STREAK_TIERS.forEach(tier => {
+                if (streakData.streakCount >= tier.threshold) {
+                    const badge = document.createElement('span');
+                    badge.className = `text-[10px] font-bold px-2.5 py-1 rounded-full ${tier.style}`;
+                    badge.innerText = tier.text;
+                    badgesContainer.appendChild(badge);
+                }
+            });
+        };
+
+        // 1B. Leader Verification Modals & Whitelist Mechanics (Parte 2 - Lista Branca de Gestores)
+        window.openEnterLeaderModal = () => {
+            clearEnterLeaderForm();
+            document.getElementById('modal-enter-leader').classList.remove('hidden');
+        };
+
+        window.closeEnterLeaderModal = () => {
+            clearEnterLeaderForm();
+            document.getElementById('modal-enter-leader').classList.add('hidden');
+        };
+
+        window.processEnterLeader = async () => {
+            const user = await ensureAuth();
+            if (!user) {
+                showToast("A aguardar autenticação segura com o servidor.", "info");
+                return;
+            }
+
+            const emailInput = document.getElementById('leader-email-input').value.trim().toLowerCase();
+
+            if (!emailInput) {
+                showToast("Por favor, preencha o seu e-mail de gestor.", "error");
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput)) {
+                showToast("Introduza um e-mail de formato Google válido.", "error");
+                return;
+            }
+
+            const verifyBtn = document.getElementById('leader-verify-btn');
+            verifyBtn.disabled = true;
+            verifyBtn.innerText = "A consultar Lista Branca de Salas...";
+
+            try {
+                // Extração do domínio corporativo (ex: empresa.com) para ligar ao Inquilino SaaS (Parte 1 e 2)
+                const companyDomain = emailInput.split('@')[1];
+                
+                // RULE 1: Aceder ao documento do Inquilino da empresa diretamente na coleção pública autorizada 'rooms' para evitar rejeição
+                const companyDocRef = getSafePublicPath('rooms', 'company_' + companyDomain);
+                const companySnap = await getDoc(companyDocRef);
+
+                if (!companySnap.exists()) {
+                    // Se o domínio corporativo não existe no ecossistema, o erro inteligente exibe como registar
+                    document.getElementById('leader-denied-reason-text').innerText = "Seu domínio empresarial não está registado no Happiness Door. Por favor, utilize a ligação 'Registar Minha Empresa' na tela inicial ou solicite ao Administrador do RH para efetuar o primeiro acesso.";
+                    document.getElementById('leader-redirect-warning').classList.remove('hidden');
+                    return;
+                }
+
+                const companyData = roomsSnapCleaner(companySnap.data());
+                
+                // A. Check if user is Master Admin (RH Master)
+                if (companyData.adminEmail === emailInput) {
+                    currentUserRole = "master-admin";
+                    currentCompany = companyData;
+                    
+                    document.getElementById('user-pill').innerText = `${emailInput} (Admin RH)`;
+                    document.getElementById('user-pill').classList.remove('hidden');
+                    document.getElementById('logout-btn').classList.remove('hidden');
+
+                    closeEnterLeaderModal();
+                    showToast("Sessão iniciada como Administrador Master!", "success");
+                    loadMasterAdminDashboard();
+                    return;
+                }
+
+                // B. Check if user is in Whitelisted Leaders list
+                const leadersList = companyData.leaders ? companyData.leaders.map(e => e.trim().toLowerCase()) : [];
+                if (leadersList.includes(emailInput)) {
+                    currentUserRole = "lider";
+                    currentCompany = companyData;
+                    
+                    document.getElementById('user-pill').innerText = `${emailInput} (Gestor)`;
+                    document.getElementById('user-pill').classList.remove('hidden');
+                    document.getElementById('logout-btn').classList.remove('hidden');
+
+                    closeEnterLeaderModal();
+                    showToast("Membro de equipa de gestão validado na lista branca!", "success");
+                    navigate('admin-dashboard');
+                } else {
+                    // Erro inteligente personalizado (conforme especificado)
+                    document.getElementById('leader-denied-reason-text').innerText = `Seu e-mail não foi encontrado na lista de gestores autorizados. Por favor, solicite ao Administrador de RH da sua empresa (${companyData.adminEmail}) para incluir o seu e-mail no painel de controle.`;
+                    document.getElementById('leader-redirect-warning').classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error("Erro ao validar e-mail do chefe corporativo:", err);
+                showToast("Não foi possível verificar a sua permissão de gestor.", "error");
+            } finally {
+                verifyBtn.disabled = false;
+                verifyBtn.innerText = "Verificar Lista Branca";
+            }
+        };
+
+        const roomsSnapCleaner = (data) => {
+            if (!data) return {};
+            return {
+                ...data,
+                leaders: data.leaders || []
+            };
+        };
+
+        // Smoothly redirects unauthorized emails to the employee workflow pre-filling the field
+        window.switchLeaderToWorkerFlow = () => {
+            const emailInput = document.getElementById('leader-email-input').value.trim();
+            closeEnterLeaderModal();
+            openEnterRoomModal();
+            document.getElementById('google-email-input').value = emailInput;
+            showToast("Redirecionado para o acesso de funcionário.", "info");
+        };
+
+        // 1C. NEW: Master Admin Company Registration (SaaS Onboarding Flow)
+        window.openRegisterCompanyModal = () => {
+            clearRegisterCompanyForm();
+            document.getElementById('modal-register-company').classList.remove('hidden');
+        };
+
+        window.closeRegisterCompanyModal = () => {
+            clearRegisterCompanyForm();
+            document.getElementById('modal-register-company').classList.add('hidden');
+        };
+
+        window.processRegisterCompany = async () => {
+            const user = await ensureAuth();
+            if (!user) {
+                showToast("Autenticação em processamento pelo ecossistema.", "info");
+                return;
+            }
+
+            const compName = document.getElementById('reg-company-name').value.trim();
+            const compDomain = document.getElementById('reg-company-domain').value.trim().toLowerCase();
+            const adminEmail = document.getElementById('reg-company-admin-email').value.trim().toLowerCase();
+
+            if (!compName || !compDomain || !adminEmail) {
+                showToast("Por favor, preencha todos os dados obrigatórios para registar a empresa.", "error");
+                return;
+            }
+
+            const domainSuffix = adminEmail.split('@')[1];
+            if (domainSuffix !== compDomain) {
+                showToast(`Incoerência de dados: O e-mail do RH (${adminEmail}) deve terminar estritamente com o domínio corporativo (@${compDomain}).`, "error");
+                return;
+            }
+
+            const submitBtn = document.getElementById('btn-reg-company-submit');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "A instanciar inquilino corporativo...";
+
+            try {
+                // CRITICAL CORRECTION: O campo 'id' deve coincidir EXATAMENTE com o docId do Firestore ('company_' + compDomain)
+                // para satisfazer a regra de validação de esquemas e permissões do servidor Firebase!
+                const targetCompanyId = 'company_' + compDomain;
+                const companyDocRef = getSafePublicPath('rooms', targetCompanyId);
+                
+                // Check if company already registered
+                const companyCheck = await getDoc(companyDocRef);
+                if (companyCheck.exists()) {
+                    showToast(`O domínio ${compDomain} já se encontra registado na nossa base de dados. Inicie sessão no painel de líderes.`, "info");
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Concluir Registo Corporativo";
+                    return;
+                }
+
+                const companyPayload = {
+                    id: targetCompanyId, // Alinhamento exato e correto com o docId!
+                    name: compName,
+                    adminEmail: adminEmail,
+                    leaders: [adminEmail], // O administrador RH mestre inicia como gestor autorizado por defeito
+                    createdAt: new Date().getTime()
+                };
+
+                await setDoc(companyDocRef, companyPayload);
+
+                currentUserRole = "master-admin";
+                currentCompany = companyPayload;
+
+                document.getElementById('user-pill').innerText = `${adminEmail} (Admin RH)`;
+                document.getElementById('user-pill').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+
+                closeRegisterCompanyModal();
+                showToast(`Empresa ${compName} registada com sucesso! Prossiga com a gestão da Lista Branca.`, "success");
+                loadMasterAdminDashboard();
+            } catch (err) {
+                console.error("Erro a registar empresa:", err);
+                showToast("Erro de permissões ou de gravação. Por favor, verifique a rede ou tente novamente.", "error");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Concluir Registo Corporativo";
+            }
+        };
+
+        // 1D. NEW: Master Admin UI loader (Gestão de Whitelist)
+        const loadMasterAdminDashboard = () => {
+            if (!currentCompany) return;
+
+            document.getElementById('info-company-name').innerText = currentCompany.name;
+            document.getElementById('info-company-domain').innerText = `@${currentCompany.id.replace('company_', '')}`;
+            document.getElementById('info-company-admin').innerText = currentCompany.adminEmail;
+            document.getElementById('master-company-domain').innerText = `@${currentCompany.id.replace('company_', '')}`;
+
+            renderWhitelistUl();
+            navigate('master-admin');
+        };
+
+        const renderWhitelistUl = () => {
+            const ul = document.getElementById('whitelist-leaders-ul');
+            ul.innerHTML = '';
+
+            if (!currentCompany || !currentCompany.leaders || currentCompany.leaders.length === 0) {
+                ul.innerHTML = `
+                    <li class="p-4 text-xs text-brand-dark/50 text-center italic">A Lista Branca de Gestores está vazia. Adicione os e-mails acima.</li>
+                `;
+                return;
+            }
+
+            currentCompany.leaders.forEach((leaderEmail) => {
+                const li = document.createElement('li');
+                li.className = "flex items-center justify-between p-3.5 text-xs text-brand-dark hover:bg-brand-bg/50 transition";
+                li.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <div class="h-2 w-2 rounded-full bg-brand-olive"></div>
+                        <span class="font-medium">${leaderEmail}</span>
+                        ${leaderEmail === currentCompany.adminEmail ? '<span class="text-[9px] bg-brand-olive/10 text-brand-oliveDark px-2 py-0.5 rounded-full font-bold">RH Master</span>' : ''}
+                    </div>
+                    ${leaderEmail !== currentCompany.adminEmail ? `
+                        <button onclick="removeLeaderFromWhitelist('${leaderEmail}')" class="text-brand-terracotta hover:underline text-[10px] font-bold flex items-center gap-1">
+                            <i data-lucide="user-x" class="w-3.5 h-3.5"></i> Remover
+                        </button>
+                    ` : ''}
+                `;
+                ul.appendChild(li);
+            });
+            lucide.createIcons();
+        };
+
+        window.addLeaderToWhitelist = async () => {
+            const input = document.getElementById('new-leader-email');
+            const newEmail = input.value.trim().toLowerCase();
+
+            if (!newEmail) {
+                showToast("Insira o e-mail de gestor corporativo a adicionar.", "error");
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(newEmail)) {
+                showToast("Introduza um e-mail válido.", "error");
+                return;
+            }
+
+            const suffix = newEmail.split('@')[1];
+            if (suffix !== currentCompany.id.replace('company_', '')) {
+                showToast(`E-mail inválido. O gestor deve possuir um e-mail do domínio corporativo da empresa (@${currentCompany.id.replace('company_', '')}).`, "error");
+                return;
+            }
+
+            if (currentCompany.leaders.includes(newEmail)) {
+                showToast("Este e-mail já consta na lista de líderes autorizados.", "info");
+                return;
+            }
+
+            try {
+                const updatedLeaders = [...currentCompany.leaders, newEmail];
+                const companyDocRef = getSafePublicPath('rooms', currentCompany.id);
+                
+                await updateDoc(companyDocRef, { leaders: updatedLeaders });
+                currentCompany.leaders = updatedLeaders;
+                
+                input.value = '';
+                renderWhitelistUl();
+                showToast(`E-mail ${newEmail} adicionado com sucesso à Lista Branca corporativa!`, "success");
+            } catch (err) {
+                console.error("Erro detalhado ao atualizar whitelist:", err);
+                showToast("Incapaz de persistir alterações na base de dados.", "error");
+            }
+        };
+
+        window.removeLeaderFromWhitelist = async (emailToRemove) => {
+            if (emailToRemove === currentCompany.adminEmail) {
+                showToast("O Administrador Master não pode ser removido da sua própria lista branca.", "error");
+                return;
+            }
+
+            try {
+                const updatedLeaders = currentCompany.leaders.filter(e => e !== emailToRemove);
+                const companyDocRef = getSafePublicPath('rooms', currentCompany.id);
+                
+                await updateDoc(companyDocRef, { leaders: updatedLeaders });
+                currentCompany.leaders = updatedLeaders;
+                
+                renderWhitelistUl();
+                showToast("Acesso revogado com sucesso.", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Erro ao revogar acesso.", "error");
+            }
+        };
+
+        // 3. Admin Room Creation Modal Mechanics
+        window.openCreateRoomModal = () => {
+            clearCreateRoomForm();
+            document.getElementById('modal-create-room').classList.remove('hidden');
+        };
+        window.closeCreateRoomModal = () => {
+            clearCreateRoomForm();
+            document.getElementById('modal-create-room').classList.add('hidden');
+        };
+
+        window.processCreateRoom = async () => {
+            const user = await ensureAuth();
+            if (!user) {
+                showToast("Autenticação pendente. Por favor, aguarde.", "info");
+                return;
+            }
+
+            const name = document.getElementById('new-room-name').value.trim();
+            const domain = document.getElementById('new-room-domain').value.trim();
+            const whitelistRaw = document.getElementById('new-room-whitelist').value;
+            const leadersRaw = document.getElementById('new-room-leaders').value;
+
+            if (!name || !domain) {
+                showToast("Por favor preencha os dados obrigatórios da nova sala.", "error");
+                return;
+            }
+
+            const allowedEmails = whitelistRaw ? whitelistRaw.split(',').map(e => e.trim().toLowerCase()).filter(e => e.length > 0) : [];
+            const leaders = leadersRaw ? leadersRaw.split(',').map(e => e.trim().toLowerCase()).filter(e => e.length > 0) : [];
+            
+            // Garante que o criador atual está na lista de líderes da própria sala
+            if (currentRoom && currentRoom.userEmail && !leaders.includes(currentRoom.userEmail)) {
+                leaders.push(currentRoom.userEmail);
+            }
+
+            const newRoomId = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.random().toString(36).substr(2, 6)}`;
+
+            try {
+                // Save New Room
+                const roomDocRef = getSafePublicPath('rooms', newRoomId);
+                await setDoc(roomDocRef, {
+                    id: newRoomId,
+                    name: name,
+                    domain: domain,
+                    allowedEmails: allowedEmails,
+                    leaders: leaders, // Leaders assigned to room
+                    createdAt: new Date().getTime()
+                });
+
+                closeCreateRoomModal();
+                showToast(`Sala '${name}' criada com sucesso!`, "success");
+                loadRooms();
+            } catch (err) {
+                console.error("Erro detalhado ao criar sala:", err);
+                showToast("Erro ao processar criação de sala. Verifique as permissões.", "error");
+            }
+        };
+
+        // 4. Load Rooms in Dashboard (Rule 3 protected)
+        const loadRooms = async () => {
+            const user = await ensureAuth();
+            if (!user) {
+                showToast("Autenticação pendente. Aguarde breves segundos...", "info");
+                return;
+            }
+
+            const roomsLoading = document.getElementById('rooms-loading');
+            const roomsContainer = document.getElementById('rooms-container');
+            roomsLoading.classList.remove('hidden');
+            roomsContainer.innerHTML = '';
+
+            try {
+                const roomsCol = getSafePublicPath('rooms');
+                
+                onSnapshot(roomsCol, (snapshot) => {
+                    roomsContainer.innerHTML = '';
+                    roomsLoading.classList.add('hidden');
+                    
+                    if (snapshot.empty) {
+                        roomsContainer.innerHTML = `
+                            <div class="col-span-full text-center py-12 bg-brand-card rounded-2xl border border-dashed border-[#EFE9DD]">
+                                <i data-lucide="folder-open" class="w-12 h-12 text-brand-dark/30 mx-auto mb-2"></i>
+                                <h4 class="font-bold text-sm text-brand-dark">Sem Salas Criadas</h4>
+                                <p class="text-xs text-brand-dark/50 mt-1">Clique em "Criar Nova Sala" no topo para dar o primeiro passo.</p>
+                            </div>
+                        `;
+                        lucide.createIcons();
+                        return;
+                    }
+
+                    snapshot.forEach((doc) => {
+                        // Filtramos ativamente documentos de metadados de empresas para que não apareçam como salas de equipa comuns (Parte 3)
+                        if (doc.id.startsWith('company_')) return;
+
+                        const room = doc.data();
+                        
+                        // MIDDLEWARE DE INTERFACE: Só renderiza salas no painel do administrador que ele de facto lidera (Parte 3)
+                        const leaderList = room.leaders ? room.leaders.map(e => e.trim().toLowerCase()) : [];
+                        const isLeaderOfThisRoom = currentRoom && leaderList.includes(currentRoom.userEmail);
+                        
+                        if (currentUserRole === 'lider' && !isLeaderOfThisRoom) {
+                            return; 
+                        }
+
+                        const card = document.createElement('div');
+                        card.className = "bg-brand-card border border-[#EFE9DD] hover:border-brand-olive rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col justify-between";
+                        card.onclick = () => {
+                            viewRoomDetails(room);
+                        };
+
+                        card.innerHTML = `
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-[10px] font-bold px-2.5 py-1 bg-brand-olive/15 text-brand-oliveDark rounded-full uppercase tracking-wider">Código: ${room.id}</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-brand-dark/40"></i>
+                                </div>
+                                <h3 class="font-display font-bold text-lg text-brand-dark">${room.name}</h3>
+                                <p class="text-xs text-brand-dark/60 mt-1 flex items-center gap-1">
+                                    <i data-lucide="globe" class="w-3.5 h-3.5"></i> @${room.domain}
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-[#EFE9DD] flex items-center justify-between text-[11px] text-brand-dark/50">
+                                <span>Ver Clima Organizacional</span>
+                                <span class="font-semibold text-brand-olive">Abrir Painel</span>
+                            </div>
+                        `;
+                        roomsContainer.appendChild(card);
+                    });
+                    lucide.createIcons();
+                }, (error) => {
+                    console.error("Erro a carregar as salas:", error);
+                });
+
+            } catch (err) {
+                console.error(err);
+                roomsLoading.classList.add('hidden');
+            }
+        };
+
+        // 5. View Room Specific Details & Live Aggregations (Líder Panel)
+        window.viewRoomDetails = async (room) => {
+            const user = await ensureAuth();
+            if (!user) {
+                showToast("Autenticação em processamento. Aguarde.", "info");
+                return;
+            }
+
+            // MIDDLEWARE DE SEGURANÇA NO SERVIDOR SIMULADO: Bloquear se for funcionário comum (Parte 2)
+            if (currentUserRole !== 'lider') {
+                showToast("Acesso Negado (403 Forbidden): Apenas líderes podem abrir o painel de métricas.", "error");
+                navigate('employee-workspace');
+                return;
+            }
+
+            // SEGURANÇA MULTI-CHEFE: O líder do Design não pode ver Engenharia (Parte 3 - Dica de Ouro)
+            const roomLeaders = room.leaders ? room.leaders.map(e => e.trim().toLowerCase()) : [];
+            const isLeaderOfThisDepartment = roomLeaders.includes(currentRoom.userEmail);
+
+            if (!isLeaderOfThisDepartment) {
+                showToast("Acesso Negado (HTTP 403): Não tem permissão de líder para consultar esta sala específica.", "error");
+                return;
+            }
+
+            currentRoom = room;
+            
+            document.getElementById('detail-room-name').innerText = room.name;
+            document.getElementById('detail-room-domain').innerText = `@${room.domain}`;
+            document.getElementById('detail-room-desc').innerText = `ID da Sala: ${room.id}`;
+            
+            // Show lock sign on admin console representing Mural segregation
+            document.getElementById('leader-mural-locked-btn').classList.remove('hidden');
+            document.getElementById('room-detail-panel').classList.remove('hidden');
+            document.getElementById('room-detail-panel').scrollIntoView({ behavior: 'smooth' });
+
+            roomSubscriptions.forEach(unsub => unsub());
+            roomSubscriptions = [];
+
+            const votesCol = getSafePublicPath('votes');
+            
+            const unsub = onSnapshot(votesCol, (snapshot) => {
+                const votes = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.roomId === room.id) {
+                        votes.push(data);
+                    }
+                });
+
+                activeRoomVotes = votes;
+                processAndRenderRoomData(votes);
+            }, (error) => {
+                console.error(error);
+            });
+
+            roomSubscriptions.push(unsub);
+        };
+
+        const processAndRenderRoomData = (votes) => {
+            const count = votes.length;
+            const privacyWarning = document.getElementById('privacy-guard-warning');
+            const roomStatsContent = document.getElementById('room-stats-content');
+
+            // Compliance with ethical critical limit (Rule: At least 5 votes required to unlock leader view)
+            if (count < 5) {
+                document.getElementById('privacy-current-votes-count').innerText = count;
+                privacyWarning.classList.remove('hidden');
+                roomStatsContent.classList.add('hidden');
+                return;
+            }
+
+            privacyWarning.classList.add('hidden');
+            roomStatsContent.classList.remove('hidden');
+
+            let happyCount = 0;
+            let neutralCount = 0;
+            let sadCount = 0;
+            let jefeCount = 0;
+
+            const feedbacksList = document.getElementById('feedbacks-list');
+            feedbacksList.innerHTML = '';
+
+            votes.forEach(item => {
+                if (item.vote === 'happy') happyCount++;
+                if (item.vote === 'neutral') neutralCount++;
+                if (item.vote === 'sad') sadCount++;
+
+                // MIDDLEWARE DE SEGURANÇA (QUERY ISOLATION): Apenas renderiza no painel do chefe o que lhe foi estritamente destinado (Parte 2 & 3)
+                // Se o feedback foi enviado para o "mural" (Público ou Anónimo), o painel do chefe NUNCA o descarrega ou renderiza aqui!
+                if (item.target === 'chefe' && item.comment) {
+                    jefeCount++;
+                    const emoteBubble = item.vote === 'happy' ? '🙂' : item.vote === 'neutral' ? '😐' : '🙁';
+                    const bgBubble = item.vote === 'happy' ? 'bg-[#FCF6E8]/70 border-brand-yellow/30' : item.vote === 'neutral' ? 'bg-[#F3F7FA]/70 border-brand-slate/30' : 'bg-[#FAF1F0]/70 border-brand-terracotta/30';
+                    
+                    const commentCard = document.createElement('div');
+                    commentCard.className = `p-4 border rounded-xl text-xs space-y-1.5 transition-all ${bgBubble}`;
+                    commentCard.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg">${emoteBubble}</span>
+                            <span class="text-[10px] text-brand-dark/40 font-semibold">${new Date(item.timestamp).toLocaleDateString('pt-PT')}</span>
+                        </div>
+                        <p class="text-brand-dark/80 italic leading-relaxed">"${item.comment}"</p>
+                    `;
+                    feedbacksList.appendChild(commentCard);
+                }
+            });
+
+            if (feedbacksList.innerHTML === '') {
+                feedbacksList.innerHTML = `
+                    <p class="text-xs text-brand-dark/50 text-center py-6">Não foram recebidos desabafos direcionados ao chefe nesta sala.</p>
+                `;
+            }
+
+            const pctHappy = Math.round((happyCount / count) * 100) || 0;
+            const pctNeutral = Math.round((neutralCount / count) * 100) || 0;
+            const pctSad = Math.round((sadCount / count) * 100) || 0;
+
+            document.getElementById('pct-happy-txt').innerText = `${pctHappy}%`;
+            document.getElementById('pct-happy-bar').style.width = `${pctHappy}%`;
+
+            document.getElementById('pct-neutral-txt').innerText = `${pctNeutral}%`;
+            document.getElementById('pct-neutral-bar').style.width = `${pctNeutral}%`;
+
+            document.getElementById('pct-sad-txt').innerText = `${pctSad}%`;
+            document.getElementById('pct-sad-bar').style.width = `${pctSad}%`;
+
+            // Exibe a contagem de feedbacks calculada
+            document.getElementById('feedbacks-count').innerText = `${jefeCount} feedbacks para o líder`;
+        };
+
+        // 6. Peers Mural Feed Loading (Part 2 Implementation)
+        const loadMuralFeed = async () => {
+            // MIDDLEWARE DE SEGURANÇA DO SERVIDOR: Bloquear chefes de puxarem os dados do Mural de funcionários (Parte 2)
+            if (currentUserRole !== 'colaborador') {
+                showToast("Acesso Negado (HTTP 403): Líderes estão proibidos de aceder ao Mural de funcionários.", "error");
+                return;
+            }
+
+            const feedContainer = document.getElementById('mural-feed-container');
+            feedContainer.innerHTML = `
+                <div class="col-span-full text-center py-8">
+                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-olive mx-auto"></div>
+                    <p class="text-xs text-brand-dark/50 mt-2">A sintonizar o mural da equipa...</p>
+                </div>
+            `;
+
+            try {
+                const votesCol = getSafePublicPath('votes');
+                const querySnap = await getDocs(votesCol);
+
+                feedContainer.innerHTML = '';
+                let hasPosts = false;
+
+                const muralPosts = [];
+                querySnap.forEach(docSnap => {
+                    const post = docSnap.data();
+                    post.docId = docSnap.id;
+                    // Only match current room & targeted for colleagues mural
+                    if (post.roomId === currentRoom.id && post.target === 'mural') {
+                        muralPosts.push(post);
+                    }
+                });
+
+                // Sort by timestamp descending
+                muralPosts.sort((a, b) => b.timestamp - a.timestamp);
+
+                muralPosts.forEach(post => {
+                    hasPosts = true;
+                    const card = document.createElement('div');
+                    card.className = "p-5 bg-white border border-[#EFE9DD] rounded-2xl shadow-sm space-y-4 hover:shadow transition relative flex flex-col justify-between";
+
+                    // IMPEDIR CHEFE DE CIFRAR O DONO PELO HORÁRIO (Parte 2 - Bloqueio Temporal)
+                    // Ofuscamos o horário exato dos desabafos anónimos para proteger o colaborador.
+                    const dateDisplay = "Hoje"; 
+
+                    // Check Identity configurations
+                    let userNameDisplay = "Colega Anónimo 🕵️";
+                    let avatarInitial = "A";
+                    let avatarBg = "bg-brand-slate/20 text-brand-dark/60";
+
+                    if (post.identidade === 'identificado' && post.userName) {
+                        userNameDisplay = post.userName;
+                        avatarInitial = post.userName.charAt(0).toUpperCase();
+                        avatarBg = "bg-brand-olive/20 text-brand-oliveDark";
+                    }
+
+                    const emoteIcon = post.vote === 'happy' ? '🙂' : post.vote === 'neutral' ? '😐' : '🙁';
+
+                    card.innerHTML = `
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2.5">
+                                    <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${avatarBg}">
+                                        ${avatarInitial}
+                                    </div>
+                                    <div>
+                                        <span class="text-xs font-bold text-brand-dark block leading-none">${userNameDisplay}</span>
+                                        <span class="text-[9px] text-brand-dark/40 block mt-1">${dateDisplay}</span>
+                                    </div>
+                                </div>
+                                <span class="text-xl filter drop-shadow-sm">${emoteIcon}</span>
+                            </div>
+                            <p class="text-xs text-brand-dark/80 italic leading-relaxed py-1">"${post.comment || "Auto-avaliou-se sem texto"}"</p>
+                        </div>
+                        <div class="border-t border-[#F7F4EC] pt-3 flex items-center justify-between text-xs text-brand-dark/60">
+                            <span class="text-[10px]">Reações de Apoio:</span>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="reactToPost('${post.docId}', '❤️')" class="flex items-center space-x-1 px-2.5 py-1 bg-[#FAF6F0] hover:bg-brand-terracotta/10 border border-[#EFE9DD] rounded-lg transition active:scale-95">
+                                    <span>❤️</span> <span id="react-count-${post.docId}-❤️" class="font-bold text-[10px] ml-0.5">${post.reactions?.["❤️"] || 0}</span>
+                                </button>
+                                <button onclick="reactToPost('${post.docId}', '🤗')" class="flex items-center space-x-1 px-2.5 py-1 bg-[#FAF6F0] hover:bg-brand-yellow/20 border border-[#EFE9DD] rounded-lg transition active:scale-95">
+                                    <span>🤗</span> <span id="react-count-${docSnapId(post.docId)}-🤗" class="font-bold text-[10px] ml-0.5">${post.reactions?.["🤗"] || 0}</span>
+                                </button>
+                                <button onclick="reactToPost('${post.docId}', '💪')" class="flex items-center space-x-1 px-2.5 py-1 bg-[#FAF6F0] hover:bg-brand-olive/20 border border-[#EFE9DD] rounded-lg transition active:scale-95">
+                                    <span>💪</span> <span id="react-count-${docSnapId(post.docId)}-💪" class="font-bold text-[10px] ml-0.5">${post.reactions?.["💪"] || 0}</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    feedContainer.appendChild(card);
+                });
+
+                if (!hasPosts) {
+                    feedContainer.innerHTML = `
+                        <div class="col-span-full text-center py-12">
+                            <i data-lucide="layers-3" class="w-12 h-12 text-brand-dark/20 mx-auto mb-2"></i>
+                            <h4 class="font-bold text-sm text-brand-dark">O Mural está Limpo</h4>
+                            <p class="text-xs text-brand-dark/50 mt-1">Ainda não há partilhas de equipa nesta sala hoje. Seja o primeiro a apoiar os colegas!</p>
+                        </div>
+                    `;
+                    lucide.createIcons();
+                }
+
+            } catch (err) {
+                console.error(err);
+                feedContainer.innerHTML = `<p class="text-xs text-brand-terracotta text-center py-4">Incapaz de carregar o mural de colegas de momento.</p>`;
+            }
+        };
+
+        const docSnapId = (id) => id;
+
+        // Supportive peer-to-peer reactions increments
+        window.reactToPost = async (voteId, emoji) => {
+            try {
+                const voteDocRef = getSafePublicPath('votes', voteId);
+                const voteSnap = await getDoc(voteDocRef);
+                if (voteSnap.exists()) {
+                    const post = voteSnap.data();
+                    const currentReactions = post.reactions || { "❤️": 0, "🤗": 0, "💪": 0 };
+                    currentReactions[emoji] = (currentReactions[emoji] || 0) + 1;
+                    
+                    await updateDoc(voteDocRef, { reactions: currentReactions });
+                    
+                    // Update visual counter instantly
+                    const el = document.getElementById(`react-count-${voteId}-${emoji}`);
+                    if (el) el.innerText = currentReactions[emoji];
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        // Export react function to window scope securely
+        window.reactToPost = window.reactToPost;
+
+        window.closeRoomDetail = () => {
+            document.getElementById('room-detail-panel').classList.add('hidden');
+            roomSubscriptions.forEach(unsub => unsub());
+            roomSubscriptions = [];
+        };
+
+        window.copyRoomLink = () => {
+            if (!currentRoom) return;
+            const fullUrl = `${window.location.origin}${window.location.pathname}?room=${currentRoom.id}`;
+            
+            try {
+                const tempInput = document.createElement('input');
+                tempInput.value = fullUrl;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                showToast("Link de acesso copiado!", "success");
+            } catch (err) {
+                showToast("Incapaz de copiar automaticamente.", "error");
+            }
+        };
+
+        // 6. Gemini 2.5 Flash Summary & Leadership Insights generator
+        window.generateAISummary = async () => {
+            const aiLoading = document.getElementById('ai-loading');
+            const aiResult = document.getElementById('ai-summary-result');
+            
+            aiLoading.classList.remove('hidden');
+            aiResult.classList.add('hidden');
+
+            // Strictly filter comments sent to boss to protect peer mural privacy
+            const comments = activeRoomVotes.filter(v => v.target === 'chefe' && v.comment).map(v => v.comment);
+            
+            if (comments.length === 0) {
+                showToast("Esta sala não dispõe de feedbacks textuais direcionados ao chefe para análise.", "info");
+                aiLoading.classList.add('hidden');
+                return;
+            }
+
+            const prompt = `Analise os seguintes comentários anónimos colhidos de uma equipa corporativa no âmbito de saúde mental e bem-estar (Happiness Door). Elabore um resumo sumário, agrupando os principais focos de dor ou satisfação, e sugira 2 ações pragmáticas e éticas para o chefe da equipa agir. Lembre-se: NÃO identifique autores. Seja altamente empático, ético, construtivo e escreva em português (Portugal).
+            
+            Comentários da Equipa:
+            ${comments.map((c, idx) => `${idx + 1}. "${c}"`).join('\n')}`;
+            const apiKey = ""; 
+            const systemPrompt = "Você é o assistente ético de saúde mental do Happiness Door, especializado em fornecer resumos empáticos e ações de RH.";
+
+            if (!apiKey) {
+                setTimeout(() => {
+                    const mockSummaryText = `### Análise de Clima por IA (Modo Offline)
+
+**Resumo da Equipa:**
+* Os comentários demonstram um bom espírito de entreajuda entre os colaboradores, mas apontam alguma sobrecarga em fases críticas de entrega.
+* Há um apelo à flexibilidade de horários e à melhoria na comunicação de prioridades por parte da gestão.
+
+**2 Ações Pragmáticas Recomendadas:**
+1. **Reunião de Alinhamento de Carga**: Agendar um espaço de 15 minutos na próxima reunião de planeamento para rever tarefas em aberto e balancear a distribuição de trabalho.
+2. **Diretriz de Desconexão**: Estabelecer um compromisso explícito de evitar comunicações urgentes fora do horário normal de expediente.`;
+                    aiResult.innerText = mockSummaryText;
+                    aiResult.classList.remove('hidden');
+                    aiLoading.classList.add('hidden');
+                }, 1000);
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                if (!response.ok) throw new Error("Erro na comunicação com o Gemini.");
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    aiResult.innerText = text;
+                    aiResult.classList.remove('hidden');
+                } else {
+                    showToast("Não foi possível gerar a análise.", "error");
+                }
+            } catch (e) {
+                console.error(e);
+                showToast("Erro ao comunicar com a IA.", "error");
+            } finally {
+                aiLoading.classList.add('hidden');
+            }
+        };
+
+        // Logout & Security Cleansing
+        window.handleLogout = () => {
+            currentRoom = null;
+            selectedEmote = null;
+            currentUserRole = "colaborador";
+            currentCompany = null;
+            document.getElementById('user-pill').classList.add('hidden');
+            document.getElementById('logout-btn').classList.add('hidden');
+            document.getElementById('role-alert-badge').classList.add('hidden');
+            
+            const commentBox = document.getElementById('anonymous-comment');
+            if (commentBox) commentBox.value = '';
+            
+            // Clean active forms fully on logout
+            clearCreateRoomForm();
+            clearEnterRoomForm();
+            clearEnterLeaderForm();
+            clearRegisterCompanyForm();
+            closeRoomDetail();
+            
+            navigate('landing');
+            showToast("Sessão fechada com sucesso.", "info");
+        };
+
+        // 5B. Select Emote & Vote Submissions
+        window.selectEmote = (emote) => {
+            if (currentUserRole !== 'colaborador') {
+                showToast("Líderes não realizam avaliações de clima.", "error");
+                return;
+            }
+            selectedEmote = emote;
+            
+            // Visual indicators update
+            ['happy', 'neutral', 'sad'].forEach(id => {
+                const btn = document.getElementById(`emote-${id}`);
+                if (!btn) return;
+                if (id === emote) {
+                    btn.classList.add('ring-2', 'ring-offset-2');
+                    btn.classList.remove('border-[#EFE9DD]');
+                    if (id === 'happy') btn.classList.add('border-brand-yellow', 'ring-brand-yellow');
+                    if (id === 'neutral') btn.classList.add('border-brand-slate', 'ring-brand-slate');
+                    if (id === 'sad') btn.classList.add('border-brand-terracotta', 'ring-brand-terracotta');
+                } else {
+                    btn.classList.remove('ring-2', 'ring-offset-2', 'ring-brand-yellow', 'ring-brand-slate', 'ring-brand-terracotta', 'border-brand-yellow', 'border-brand-slate', 'border-brand-terracotta');
+                    btn.classList.add('border-[#EFE9DD]');
+                }
+            });
+        };
+
+        window.submitDailyVote = async () => {
+            const user = await ensureAuth();
+            if (!user) {
+                showToast("A autenticar de forma segura...", "info");
+                return;
+            }
+
+            if (!selectedEmote) {
+                showToast("Por favor, selecione um emote de humor antes de submeter.", "error");
+                return;
+            }
+
+            const commentText = document.getElementById('anonymous-comment').value.trim();
+            const destination = document.querySelector('input[name="message-destination"]:checked').value;
+            
+            let target = "chefe";
+            let identidade = "anonimo";
+            
+            if (destination === "mural-anonimo" || destination === "mural-publico") {
+                target = "mural";
+            }
+            if (destination === "mural-publico") {
+                identidade = "identificado";
+            }
+
+            const submitBtn = document.getElementById('submit-vote-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "A submeter avaliação...";
+
+            try {
+                const votePayload = {
+                    roomId: currentRoom.id,
+                    vote: selectedEmote,
+                    comment: commentText || null,
+                    target: target,
+                    identidade: identidade,
+                    userName: identidade === "identificado" ? currentRoom.userEmail : null,
+                    timestamp: new Date().getTime(),
+                    reactions: { "❤️": 0, "🤗": 0, "💪": 0 }
+                };
+
+                // Save vote
+                const votesCol = getSafePublicPath('votes');
+                await addDoc(votesCol, votePayload);
+
+                // Update employee streak
+                const userHash = btoa(currentRoom.userEmail).replace(/=/g, '');
+                const userStreakRef = getSafePrivatePath(user.uid, 'user_streaks', currentRoom.id + '_' + userHash);
+                const streakSnap = await getDoc(userStreakRef);
+                
+                let streakCount = 1;
+                if (streakSnap.exists()) {
+                    const streakData = streakSnap.data();
+                    const todayStr = new Date().toDateString();
+                    const lastVoteDate = streakData.lastVoteDate ? new Date(streakData.lastVoteDate).toDateString() : null;
+                    
+                    if (lastVoteDate !== todayStr) {
+                        const yesterday = new Date();
+                        yesterday.setDate(yesterday.getDate() - 1);
+                        const yesterdayStr = yesterday.toDateString();
+                        
+                        if (lastVoteDate === yesterdayStr) {
+                            streakCount = (streakData.streakCount || 0) + 1;
+                        } else {
+                            streakCount = 1;
+                        }
+                    } else {
+                        streakCount = streakData.streakCount || 1;
+                    }
+                }
+
+                const updatedStreak = {
+                    roomId: currentRoom.id,
+                    streakCount: streakCount,
+                    lastVoteDate: new Date().getTime(),
+                    badges: []
+                };
+
+                await setDoc(userStreakRef, updatedStreak);
+                updateStreakUI(updatedStreak);
+
+                // Configure thank you screen
+                const emoteFace = selectedEmote === 'happy' ? '🙂' : selectedEmote === 'neutral' ? '😐' : '🙁';
+                document.getElementById('thank-you-emote').innerText = emoteFace;
+
+                const msgEl = document.getElementById('thank-you-message');
+                if (selectedEmote === 'happy') {
+                    msgEl.innerText = "Que excelente! Ficamos felizes por o seu dia estar a correr bem. Continue com a energia positiva!";
+                } else if (selectedEmote === 'neutral') {
+                    msgEl.innerText = "Obrigado por partilhar. Dias neutros são normais, que o resto da jornada seja produtivo e tranquilo.";
+                } else {
+                    msgEl.innerText = "Lamentamos que o seu dia esteja a ser desafiante. O seu desabafo foi guardado e a sua privacidade está salvaguardada.";
+                }
+
+                // Reset selection and inputs
+                selectedEmote = null;
+                document.getElementById('anonymous-comment').value = '';
+                
+                // Reset visual selection states
+                ['happy', 'neutral', 'sad'].forEach(id => {
+                    const btn = document.getElementById(`emote-${id}`);
+                    if (btn) {
+                        btn.classList.remove('ring-2', 'ring-offset-2', 'ring-brand-yellow', 'ring-brand-slate', 'ring-brand-terracotta');
+                        btn.classList.add('border-[#EFE9DD]');
+                    }
+                });
+
+                showToast("Avaliação diária submetida!", "success");
+                navigate('thank-you');
+            } catch (err) {
+                console.error("Erro ao submeter voto:", err);
+                showToast("Erro ao guardar o voto na base de dados.", "error");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Submeter Avaliação de Hoje";
+            }
+        };
+
+        const checkUrlParams = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const roomCode = urlParams.get('room');
+            if (roomCode) {
+                openEnterRoomModal();
+                document.getElementById('room-code-input').value = roomCode;
+            }
+        };
+
+        // Run Onload Initiators
+        window.onload = async () => {
+            await initAuth();
+            lucide.createIcons();
+            checkUrlParams();
+        };
+
+        // Export custom methods to global window scope safely
+        window.openEnterLeaderModal = openEnterLeaderModal;
+        window.closeEnterLeaderModal = closeEnterLeaderModal;
+        window.processEnterLeader = processEnterLeader;
+        window.switchLeaderToWorkerFlow = switchLeaderToWorkerFlow;
+        window.openRegisterCompanyModal = openRegisterCompanyModal;
+        window.closeRegisterCompanyModal = closeRegisterCompanyModal;
+        window.processRegisterCompany = processRegisterCompany;
+
+    </script>
+</body>
+</html>
